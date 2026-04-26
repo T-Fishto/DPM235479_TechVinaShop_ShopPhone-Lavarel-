@@ -1,0 +1,170 @@
+
+body {
+    background: #1c2331; 
+    font-family: 'Segoe UI', system-ui, sans-serif;
+}
+
+/* Khung bọc ngoài căn giữa màn hình */
+.login-container, 
+.auth-container {
+    min-height: calc(100vh - 120px);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 2rem 0;
+}
+
+/* Hiệu ứng thẻ kính mờ (Glassmorphism) */
+.login-card, 
+.auth-card {
+    background: rgba(255, 255, 255, 0.05);
+    backdrop-filter: blur(15px);
+    -webkit-backdrop-filter: blur(15px);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 20px;
+    box-shadow: 0 15px 35px rgba(0, 0, 0, 0.3);
+    padding: 2.5rem;
+    color: white;
+    width: 100%;
+    max-width: 450px; /* Dùng chung 450px cho tất cả các form */
+}
+
+/* Định dạng Tiêu đề */
+.login-card h1, .auth-card h1,
+.auth-card h2, .auth-card h3 {
+    font-weight: 700;
+    letter-spacing: 0.5px;
+    color: #ffffff;
+    text-align: center;
+}
+
+.login-card h1, .auth-card h1 {
+    font-size: 2rem;
+    margin-bottom: 1.5rem;
+    text-transform: uppercase;
+}
+
+.auth-card h2 { font-size: 1.8rem; margin-bottom: 1rem; }
+.auth-card h3 { font-size: 1.5rem; margin-bottom: 1rem; }
+
+/* Định dạng Label và Input */
+.form-label {
+    font-weight: 600;
+    color: #d1d5db;
+    font-size: 0.9rem;
+}
+
+.form-control-custom {
+    background: rgba(255, 255, 255, 0.08) !important;
+    border: 1px solid rgba(255, 255, 255, 0.15) !important;
+    border-radius: 12px;
+    padding: 12px 16px;
+    color: white !important;
+    font-size: 1rem;
+}
+
+.form-control-custom::placeholder {
+    color: rgba(255, 255, 255, 0.4);
+}
+
+.form-control-custom:focus {
+    background: rgba(255, 255, 255, 0.15) !important;
+    border-color: #6a8caf !important;
+    box-shadow: 0 0 0 3px rgba(106, 140, 175, 0.3) !important;
+    outline: none;
+}
+
+/* Định dạng Checkbox */
+.form-check-input {
+    background-color: rgba(255, 255, 255, 0.1);
+    border-color: rgba(255, 255, 255, 0.3);
+}
+.form-check-input:checked {
+    background-color: #6a8caf;
+    border-color: #6a8caf;
+}
+
+/* Định dạng các Nút bấm (Button) */
+.btn-login, 
+.btn-submit {
+    background: rgba(255, 255, 255, 0.1);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    border-radius: 12px;
+    padding: 12px;
+    font-size: 1.1rem;
+    font-weight: 600;
+    color: white;
+    transition: all 0.3s ease;
+    width: 100%;
+}
+
+.btn-login:hover, 
+.btn-submit:hover {
+    background: rgba(255, 255, 255, 0.2);
+    transform: translateY(-2px);
+}
+
+.btn-register {
+    background: transparent;
+    border: 1px solid rgba(255, 255, 255, 0.3);
+    border-radius: 12px;
+    padding: 12px;
+    font-size: 1.1rem;
+    font-weight: 600;
+    color: #d1d5db;
+    text-align: center;
+    text-decoration: none;
+    transition: all 0.3s ease;
+    display: block;
+}
+
+.btn-register:hover {
+    background: rgba(255, 255, 255, 0.05);
+    color: white;
+    border-color: rgba(255, 255, 255, 0.6);
+}
+
+.btn-link-custom {
+    color: #6a8caf;
+    font-weight: bold;
+    text-decoration: underline;
+}
+.btn-link-custom:hover {
+    color: #ffffff;
+}
+
+/* Khung thông báo Alerts (Gửi email, Verify) */
+.alert-custom {
+    background: rgba(25, 135, 84, 0.2);
+    border: 1px solid rgba(25, 135, 84, 0.5);
+    color: #a3cfbb;
+    border-radius: 12px;
+}
+
+.btn-google {
+    background: #ffffff;
+    border: 1px solid #ddd;
+    border-radius: 12px;
+    padding: 12px;
+    font-size: 1.1rem;
+    font-weight: 600;
+    color: #444;
+    text-align: center;
+    text-decoration: none;
+    transition: all 0.3s ease;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.btn-google img {
+    width: 20px;
+    margin-right: 10px;
+}
+
+.btn-google:hover {
+    background: #f8f9fa;
+    color: #222;
+    transform: translateY(-2px);
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+}

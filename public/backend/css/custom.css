@@ -1,0 +1,74 @@
+/* Custom Admin Theme */
+:root {
+    --admin-primary: #6366f1; /* Indigo */
+    --admin-primary-hover: #4f46e5;
+    --admin-sidebar-bg: #1e1b4b; /* Dark Indigo */
+    --admin-sidebar-active: #312e81;
+    --admin-sidebar-text: #cbd5e1;
+    --transition: all 0.3s ease;
+}
+
+/* Sidebar background and text */
+.sidebar, .sidebar-content {
+    background: var(--admin-sidebar-bg) !important;
+    transition: var(--transition);
+}
+
+.sidebar-brand {
+    background: var(--admin-sidebar-bg) !important;
+    color: #fff !important;
+    padding: 1.5rem 1.5rem;
+    font-weight: 700;
+}
+
+.sidebar-link, .sidebar-link i, .sidebar-link span {
+    color: var(--admin-sidebar-text) !important;
+    background: transparent !important;
+    transition: var(--transition);
+}
+
+/* Hover and Active states */
+.sidebar-item.active .sidebar-link, 
+.sidebar-item.active > .sidebar-link:hover {
+    background: var(--admin-sidebar-active) !important;
+    color: #fff !important;
+    border-left: 4px solid var(--admin-primary) !important;
+}
+
+.sidebar-link:hover {
+    background: rgba(255, 255, 255, 0.08) !important;
+    color: #fff !important;
+}
+
+/* Buttons */
+.btn-primary {
+    background-color: var(--admin-primary) !important;
+    border-color: var(--admin-primary) !important;
+    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+    transition: var(--transition);
+}
+
+.btn-primary:hover {
+    background-color: var(--admin-primary-hover) !important;
+    border-color: var(--admin-primary-hover) !important;
+    transform: translateY(-1px);
+    box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
+}
+
+/* Badge and other primary elements */
+.badge-primary, .bg-primary {
+    background-color: var(--admin-primary) !important;
+}
+
+.text-primary {
+    color: var(--admin-primary) !important;
+}
+
+/* Custom scrollbar for sidebar */
+.sidebar-content::-webkit-scrollbar {
+    width: 6px;
+}
+.sidebar-content::-webkit-scrollbar-thumb {
+    background: rgba(255, 255, 255, 0.1);
+    border-radius: 10px;
+}
