@@ -8,9 +8,9 @@ echo "Fixing permissions..."
 chown -R www-data:www-data /var/www/storage /var/www/bootstrap/cache
 chmod -R 775 /var/www/storage /var/www/bootstrap/cache
 
-# Chạy migrations tự động khi deploy
+# Chạy migrations tự động khi deploy (Tạm thời thêm || true để tránh sập container nếu chưa có DB)
 echo "Running migrations..."
-php artisan migrate --force
+php artisan migrate --force || true
 
 # Xóa và tạo lại cache để tối ưu hiệu năng
 echo "Optimizing Laravel..."
