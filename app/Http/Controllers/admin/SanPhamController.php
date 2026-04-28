@@ -50,7 +50,7 @@ class SanPhamController extends Controller
             'dongia' => ['required', 'numeric', 'min:0'],
             'hinhanh' => ['nullable', 'image', 'max:2048'],
         ]);
-        
+        //lấy dữ liệu từ form điền vào CSDL
         $orm = new SanPham();
         $orm->loaisanpham_id = $request->loaisanpham_id;
         $orm->hangsanxuat_id = $request->hangsanxuat_id;
@@ -61,11 +61,11 @@ class SanPhamController extends Controller
         $orm->motasanpham = $request->motasanpham;
 
         // 2. Xử lý lưu hình ảnh vào thư mục public/uploads/sanpham
-        if($request->hasFile('hinhanh')) {
+        if($request->hasFile('hinhanh')) { // Kiểm tra nếu có file hình ảnh được tải lên
             $file = $request->file('hinhanh');
             $filename = time() . '_' . $orm->tensanpham_slug . '.' . $file->getClientOriginalExtension();
             $file->move(public_path('uploads/sanpham'), $filename);
-            $orm->hinhanh = $filename;
+            $orm->hinhanh = $filename; // Lưu tên file vào CSDL để sau này hiển thị hình ảnh
         }
 
         $orm->save();
@@ -78,10 +78,11 @@ class SanPhamController extends Controller
      */
     public function edit($id)
     {
-        $sanpham = SanPham::findOrFail($id);
+        $sanpham = SanPham::findOrFail($id); // Tìm sản phẩm theo ID, nếu không tìm thấy sẽ trả về lỗi 404
         $loaisanpham = LoaiSanPham::all();
         $hangsanxuat = HangSanXuat::all();
         return view('admin.sanpham.sua', compact('sanpham', 'loaisanpham', 'hangsanxuat'));
+        //Đóng gói lại và khi bấm nút sửa sẽ có đầy đủ thông tin sản phẩm, loại sản phẩm và hãng sản xuất để hiển thị trong form chỉnh sửa
     }
 
     /**

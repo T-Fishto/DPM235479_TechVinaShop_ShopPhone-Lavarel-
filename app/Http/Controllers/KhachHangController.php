@@ -3,7 +3,8 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
-use App\Models\User; 
+use App\Models\User;
+use App\Models\Voucher;
 
 class KhachHangController extends Controller
 {
@@ -20,25 +21,47 @@ class KhachHangController extends Controller
     {
         $request->validate([
             'dienthoai' => 'required|string|max:20',
-            'diachi' => 'required|string',
+            'diachi'    => 'required|string',
             'cart_data' => 'required|string',
         ]);
 
         $cart = json_decode($request->cart_data, true);
-        
+
         if (empty($cart)) {
             return redirect()->back()->with('error', 'Giỏ hàng của bạn đang trống!');
         }
 
+        // Xử lý voucher nếu có
+        $soTienGiam   = 0;
+        $maGiamGia    = null;
+        $tongTienGoc  = collect($cart)->sum(fn($item) => $item['price'] * $item['quantity']);
+
+        if ($request->filled('ma_giam_gia')) {
+            $voucher = Voucher::where('ma_giam_gia', strtoupper(trim($request->ma_giam_gia)))->first();
+            if ($voucher) {
+                $kiemTra = $voucher->isHopLe($tongTienGoc);
+                if ($kiemTra['hop_le']) {
+                    $soTienGiam = $voucher->tinhSoTienGiam($tongTienGoc);
+                    $maGiamGia  = $voucher->ma_giam_gia;
+                } else {
+                    return redirect()->back()->with('error', 'Mã giảm giá: ' . $kiemTra['thong_bao'])->withInput();
+                }
+            } else {
+                return redirect()->back()->with('error', 'Mã giảm giá không tồn tại.')->withInput();
+            }
+        }
+
         try {
-            \Illuminate\Support\Facades\DB::transaction(function () use ($request, $cart) {
+            \Illuminate\Support\Facades\DB::transaction(function () use ($request, $cart, $soTienGiam, $maGiamGia) {
                 // Tạo đơn hàng mới
                 $donhang = new \App\Models\DonHang();
-                $donhang->user_id = \Illuminate\Support\Facades\Auth::id();
-                $donhang->tinhtrang_id = 1; // 1: Mới đặt / Đang xử lý
-                $donhang->dienthoaigiaohang = $request->dienthoai;
-                $donhang->diachigiaohang = $request->diachi;
-                $donhang->phuongthucthanhtoan = $request->phuongthuc;
+                $donhang->user_id              = \Illuminate\Support\Facades\Auth::id();
+                $donhang->tinhtrang_id         = 1;
+                $donhang->dienthoaigiaohang    = $request->dienthoai;
+                $donhang->diachigiaohang       = $request->diachi;
+                $donhang->phuongthucthanhtoan  = $request->phuongthuc;
+                $donhang->ma_giam_gia          = $maGiamGia;
+                $donhang->so_tien_giam         = $soTienGiam;
                 $donhang->save();
 
                 // Tạo chi tiết đơn hàng và trừ tồn kho
@@ -59,9 +82,15 @@ class KhachHangController extends Controller
                     $sanpham->soluong -= $item['quantity'];
                     $sanpham->save();
                 }
-                
+
+                // Tăng số lần đã dùng của voucher
+                if ($maGiamGia) {
+                    \App\Models\Voucher::where('ma_giam_gia', $maGiamGia)
+                        ->increment('so_lan_da_su_dung');
+                }
+
                 // Gửi email xác nhận
-                if (\Illuminate\Support\Facades\Auth::user() && \Illuminate\Support\Facades\Auth::user()->email) {
+                if (\Illuminate\Support\Facades\Auth::user()?->email) {
                     \Illuminate\Support\Facades\Mail::to(\Illuminate\Support\Facades\Auth::user()->email)
                         ->send(new \App\Mail\DatHangThanhCongMail($donhang));
                 }
@@ -204,19 +233,56 @@ class KhachHangController extends Controller
         $danhgia = \App\Models\DanhGia::findOrFail($id);
         $user_id = Auth::id();
 
-        // Kiểm tra xem đã tim chưa
         $tim = \App\Models\DanhGiaTim::where('danhgia_id', $id)->where('user_id', $user_id)->first();
 
         if ($tim) {
-            $tim->delete(); // Nếu đã tim rồi thì xóa (bỏ tim)
+            $tim->delete();
         } else {
             \App\Models\DanhGiaTim::create([
                 'danhgia_id' => $id,
-                'user_id' => $user_id
-            ]); // Nếu chưa tim thì thêm mới
+                'user_id'    => $user_id
+            ]);
         }
 
         return redirect()->back();
-    } 
-    // Vocher giảm giá
+    }
+
+    /**
+     * API kiểm tra và áp dụng mã giảm giá
+     */
+    public function postKiemTraVoucher(Request $request)
+    {
+        $request->validate([
+            'ma_giam_gia' => 'required|string',
+            'tong_tien'   => 'required|numeric|min:0',
+        ]);
+
+        $voucher = Voucher::where('ma_giam_gia', strtoupper(trim($request->ma_giam_gia)))->first();
+
+        if (!$voucher) {
+            return response()->json([
+                'hop_le'    => false,
+                'thong_bao' => 'Mã giảm giá không tồn tại.',
+            ]);
+        }
+
+        $kiemTra = $voucher->isHopLe((int) $request->tong_tien);
+
+        if (!$kiemTra['hop_le']) {
+            return response()->json([
+                'hop_le'    => false,
+                'thong_bao' => $kiemTra['thong_bao'],
+            ]);
+        }
+
+        $soTienGiam = $voucher->tinhSoTienGiam((int) $request->tong_tien);
+
+        return response()->json([
+            'hop_le'       => true,
+            'thong_bao'    => 'Mã đã được áp dụng!',
+            'ten_voucher'  => $voucher->ten_voucher,
+            'so_tien_giam' => $soTienGiam,
+            'so_tien_giam_format' => number_format($soTienGiam, 0, ',', '.') . 'đ',
+        ]);
+    }
 }

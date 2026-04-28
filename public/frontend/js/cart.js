@@ -14,7 +14,7 @@ document.addEventListener('DOMContentLoaded', function() {
     }
 
     function updateCartUI() {
-        // Luôn cập nhật localStorage trước khi render UI
+        // Luôn cập nhật localStorage 
         localStorage.setItem('cart', JSON.stringify(cart));
         
         if (!cartItemsList) return;
@@ -121,7 +121,7 @@ document.addEventListener('DOMContentLoaded', function() {
         updateCartUI();
     };
 
-    // Hàm đổi số lượng (Global để inline click gọi được)
+    // Hàm đổi số lượng (Global để inline click gọi được) trong giỏ hàng
     window.changeQty = function(index, delta) {
         const item = cart[index];
         if (delta === -1 && item.quantity <= 1) return;
@@ -179,7 +179,7 @@ document.addEventListener('DOMContentLoaded', function() {
             const stock = parseInt(this.getAttribute('data-stock')) || 0;
             const img = this.getAttribute('data-img') || 'https://via.placeholder.com/300x400?text=No+Image';
             
-            const inputEl = document.getElementById('buyQuantity');
+            const inputEl = document.getElementById('buyQuantity'); // ô nhập liệu cho số lượng mua bên chi tiết
             const qty = inputEl ? parseInt(inputEl.value) : 1;
 
             const existingItem = cart.find(item => item.id === id);
@@ -206,7 +206,7 @@ document.addEventListener('DOMContentLoaded', function() {
         });
     }
 
-    // Scroll Effect cho Navbar
+    // Scroll Effect cho Navbar cái cuộn trang màu vàng
     window.addEventListener('scroll', function() {
         const nav = document.getElementById('mainNav');
         if (nav) {

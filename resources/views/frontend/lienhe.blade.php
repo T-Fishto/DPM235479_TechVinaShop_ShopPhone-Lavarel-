@@ -68,28 +68,37 @@
         <div class="col-lg-7 animate__animated animate__fadeInRight">
             <div class="card bg-transparent border-secondary border-opacity-25 rounded-0 p-4 p-md-5">
                 <h4 class="playfair text-white mb-4">Gửi tin nhắn cho chúng tôi</h4>
+                
+                @if(session('status'))
+                    <div class="alert alert-success alert-dismissible fade show mb-4 rounded-0 bg-transparent border-gold text-gold">
+                        <i class="fa-solid fa-circle-check me-2"></i>{{ session('status') }}
+                        <button type="button" class="btn-close btn-close-white" data-bs-dismiss="alert"></button>
+                    </div>
+                @endif
+
                 <p class="text-secondary small mb-4">Nếu bạn có bất kỳ thắc mắc nào về sản phẩm hoặc dịch vụ, vui lòng để lại lời nhắn, chúng tôi sẽ phản hồi trong vòng 24 giờ.</p>
                 
-                <form action="#" method="POST">
+                <form action="{{ route('frontend.lienhe') }}" method="POST">
+                    @csrf
                     <div class="row g-3">
                         <div class="col-md-6">
                             <label class="form-label text-gold small text-uppercase tracking-widest">Họ và tên</label>
-                            <input type="text" class="form-control bg-dark border-secondary text-white shadow-none py-2" required>
+                            <input type="text" name="ho_ten" class="form-control bg-dark border-secondary text-white shadow-none py-2" value="{{ old('ho_ten') }}" required>
                         </div>
                         <div class="col-md-6">
                             <label class="form-label text-gold small text-uppercase tracking-widest">Số điện thoại</label>
-                            <input type="tel" class="form-control bg-dark border-secondary text-white shadow-none py-2" required>
+                            <input type="tel" name="dien_thoai" class="form-control bg-dark border-secondary text-white shadow-none py-2" value="{{ old('dien_thoai') }}" required>
                         </div>
                         <div class="col-12">
                             <label class="form-label text-gold small text-uppercase tracking-widest">Email</label>
-                            <input type="email" class="form-control bg-dark border-secondary text-white shadow-none py-2" required>
+                            <input type="email" name="email" class="form-control bg-dark border-secondary text-white shadow-none py-2" value="{{ old('email') }}" required>
                         </div>
                         <div class="col-12">
                             <label class="form-label text-gold small text-uppercase tracking-widest">Lời nhắn của bạn</label>
-                            <textarea class="form-control bg-dark border-secondary text-white shadow-none py-2" rows="5" required></textarea>
+                            <textarea name="noi_dung" class="form-control bg-dark border-secondary text-white shadow-none py-2" rows="5" required>{{ old('noi_dung') }}</textarea>
                         </div>
                         <div class="col-12 pt-3">
-                            <button type="button" class="btn btn-lux w-100 py-3 text-uppercase tracking-widest">Gửi lời nhắn ngay</button>
+                            <button type="submit" class="btn btn-lux w-100 py-3 text-uppercase tracking-widest">Gửi lời nhắn ngay</button>
                         </div>
                     </div>
                 </form>

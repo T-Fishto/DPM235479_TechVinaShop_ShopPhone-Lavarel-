@@ -45,7 +45,13 @@
                                     </div>
                                     @php $tongtien += $chitiet->soluongban * $chitiet->dongiaban; @endphp
                                 @endforeach
-                                <div class="fw-bold text-primary">Tổng: {{ number_format($tongtien) }}đ</div>
+                                @if($value->ma_giam_gia)
+                                    <div class="small text-success">
+                                        <i class="align-middle" data-feather="tag" style="width:12px; height:12px;"></i> 
+                                        Giảm: -{{ number_format($value->so_tien_giam) }}đ ({{ $value->ma_giam_gia }})
+                                    </div>
+                                @endif
+                                <div class="fw-bold text-primary">Tổng: {{ number_format($tongtien - ($value->so_tien_giam ?? 0)) }}đ</div>
                             </div>
                         </td>
                         <td>{{ $value->created_at->format('d/m/Y H:i') }}</td>

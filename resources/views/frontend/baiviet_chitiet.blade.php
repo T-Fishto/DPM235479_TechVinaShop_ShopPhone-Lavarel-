@@ -3,6 +3,16 @@
 
 @section('content')
 <article class="py-5">
+    <div class="container mb-4">
+        <nav aria-label="breadcrumb" class="animate__animated animate__fadeIn">
+            <ol class="breadcrumb mb-0">
+                <li class="breadcrumb-item"><a href="{{ route('frontend.home') }}" class="text-secondary text-decoration-none hover-gold transition-all">Trang chủ</a></li>
+                <li class="breadcrumb-item"><a href="{{ route('frontend.baiviet') }}" class="text-secondary text-decoration-none hover-gold transition-all">Bài viết</a></li>
+                <li class="breadcrumb-item"><a href="{{ route('frontend.baiviet.theochude', ['tenchude_slug' => $baiviet->ChuDe->tenchude_slug]) }}" class="text-secondary text-decoration-none hover-gold transition-all">{{ $baiviet->ChuDe->tenchude }}</a></li>
+                <li class="breadcrumb-item active text-gold" aria-current="page">{{ $baiviet->tieude }}</li>
+            </ol>
+        </nav>
+    </div>
     <!-- Header -->
     <div class="container mb-5">
         <div class="row justify-content-center">

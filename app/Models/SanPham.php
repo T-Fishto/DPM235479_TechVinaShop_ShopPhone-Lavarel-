@@ -31,11 +31,11 @@ class SanPham extends Model
     {
         return $this->belongsTo(LoaiSanPham::class, 'loaisanpham_id', 'id');
     }
-    public function DonHang_ChiTiet(): HasMany // mỗi đơn hàng chi tiết có thể liên kết với nhiều sản phẩm
+    public function DonHang_ChiTiet(): HasMany // mỗi sản phẩm có thể xuất hiện trong nhiều chi tiết đơn hàng
     {
         return $this->hasMany(DonHang_ChiTiet::class, 'sanpham_id', 'id');
     }
-    public function DanhGia(): HasMany
+    public function DanhGia(): HasMany // mỗi sản phẩm có thể có nhiều đánh giá
     {
         return $this->hasMany(DanhGia::class, 'sanpham_id', 'id');
     }

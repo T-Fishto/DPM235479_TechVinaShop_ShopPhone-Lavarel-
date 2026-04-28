@@ -83,8 +83,18 @@
                         </tbody>
                         <tfoot>
                             <tr>
+                                <td colspan="3" class="bg-transparent border-secondary border-opacity-25 text-end text-white playfair small">Tạm tính:</td>
+                                <td class="bg-transparent border-secondary border-opacity-25 text-end text-white small fw-bold">{{ number_format($tongTien, 0, ',', '.') }}đ</td>
+                            </tr>
+                            @if($donhang->ma_giam_gia)
+                            <tr>
+                                <td colspan="3" class="bg-transparent border-secondary border-opacity-25 text-end text-white playfair small">Giảm giá ({{ $donhang->ma_giam_gia }}):</td>
+                                <td class="bg-transparent border-secondary border-opacity-25 text-end text-success small fw-bold">-{{ number_format($donhang->so_tien_giam, 0, ',', '.') }}đ</td>
+                            </tr>
+                            @endif
+                            <tr>
                                 <td colspan="3" class="bg-transparent border-secondary border-opacity-25 text-end text-white playfair">Tổng cộng:</td>
-                                <td class="bg-transparent border-secondary border-opacity-25 text-end text-gold fs-5 fw-bold playfair">{{ number_format($tongTien, 0, ',', '.') }}đ</td>
+                                <td class="bg-transparent border-secondary border-opacity-25 text-end text-gold fs-5 fw-bold playfair">{{ number_format($tongTien - ($donhang->so_tien_giam ?? 0), 0, ',', '.') }}đ</td>
                             </tr>
                         </tfoot>
                     </table>

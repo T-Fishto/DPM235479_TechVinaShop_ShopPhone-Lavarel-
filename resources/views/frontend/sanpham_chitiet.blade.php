@@ -5,7 +5,8 @@
 <div class="container py-5">
     <nav aria-label="breadcrumb" class="mb-5 animate__animated animate__fadeIn">
         <ol class="breadcrumb mb-0">
-            <li class="breadcrumb-item"><a href="#" class="text-secondary text-decoration-none hover-gold transition-all">{{ $sanpham->LoaiSanPham->tenloai ?? 'Sản phẩm' }}</a></li>
+            <li class="breadcrumb-item"><a href="{{ route('frontend.home') }}" class="text-secondary text-decoration-none hover-gold transition-all">Trang chủ</a></li>
+            <li class="breadcrumb-item"><a href="{{ route('frontend.sanpham.theoloai', $sanpham->LoaiSanPham->tenloai_slug ?? '') }}" class="text-secondary text-decoration-none hover-gold transition-all">{{ $sanpham->LoaiSanPham->tenloai ?? 'Sản phẩm' }}</a></li>
             <li class="breadcrumb-item active text-gold" aria-current="page">{{ $sanpham->tensanpham }}</li>
         </ol>
     </nav>

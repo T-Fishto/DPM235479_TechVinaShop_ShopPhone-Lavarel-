@@ -67,8 +67,25 @@
                 </tbody>
                 <tfoot>
                     <tr>
+                        <td colspan="4" class="text-end"><strong>Tạm tính:</strong></td>
+                        <td class="text-end"><strong>{{ number_format($tongTien, 0, ',', '.') }}đ</strong></td>
+                    </tr>
+                    @if($donhang->ma_giam_gia)
+                    <tr>
+                        <td colspan="4" class="text-end text-success">
+                            <i class="fa-solid fa-tag me-1"></i>
+                            <strong>Mã giảm giá ({{ $donhang->ma_giam_gia }}):</strong>
+                        </td>
+                        <td class="text-end text-success">
+                            <strong>-{{ number_format($donhang->so_tien_giam, 0, ',', '.') }}đ</strong>
+                        </td>
+                    </tr>
+                    @endif
+                    <tr>
                         <td colspan="4" class="text-end"><strong>Tổng cộng thanh toán:</strong></td>
-                        <td class="text-end text-danger"><strong>{{ number_format($tongTien, 0, ',', '.') }}đ</strong></td>
+                        <td class="text-end text-danger fs-4">
+                            <strong>{{ number_format($tongTien - ($donhang->so_tien_giam ?? 0), 0, ',', '.') }}đ</strong>
+                        </td>
                     </tr>
                 </tfoot>
             </table>

@@ -47,6 +47,7 @@ Route::name('frontend.')->group(function () {
 
     // Liên hệ
     Route::get('/lien-he', [HomeController::class, 'getLienHe'])->name('lienhe');
+    Route::post('/lien-he', [HomeController::class, 'postLienHe'])->name('lienhe');
 
 
 });
@@ -80,6 +81,9 @@ Route::prefix('khach-hang')->name('user.')->middleware(['auth'])->group(function
     Route::get('/danh-gia/{tensanpham_slug}', [KhachHangController::class, 'getDanhGiaSanPham'])->name('danhgia');
     Route::post('/danh-gia/{tensanpham_slug}', [KhachHangController::class, 'postDanhGiaSanPham'])->name('danhgia');
     Route::post('/danh-gia/tim/{id}', [KhachHangController::class, 'postTimDanhGia'])->name('danhgia.tim');
+
+    // Kiểm tra mã giảm giá (Voucher)
+    Route::post('/kiem-tra-voucher', [KhachHangController::class, 'postKiemTraVoucher'])->name('kiemtravoucher');
 });
 
 
@@ -171,7 +175,14 @@ Route::prefix('admin')->name('admin.')->middleware(['auth', 'admin'])->group(fun
     Route::get('/baiviet/xoa/{id}', [App\Http\Controllers\admin\BaiVietController::class, 'destroy'])->name('baiviet.xoa');
     Route::get('/baiviet/kiemduyet/{id}', [App\Http\Controllers\admin\BaiVietController::class, 'kiemduyet'])->name('baiviet.kiemduyet');
     Route::get('/baiviet/kichhoat/{id}', [App\Http\Controllers\admin\BaiVietController::class, 'kichhoat'])->name('baiviet.kichhoat');
-    // Thông báo đặt hàng
-    // Route::get('/dathangdemo', [HomeController::class, 'getDatHangDemo'])->name('frontend.dathangdemo');
+
+    // Quản lý Mã giảm giá (Voucher)
+    Route::get('/voucher', [App\Http\Controllers\admin\VoucherController::class, 'index'])->name('voucher');
+    Route::get('/voucher/them', [App\Http\Controllers\admin\VoucherController::class, 'create'])->name('voucher.them');
+    Route::post('/voucher/them', [App\Http\Controllers\admin\VoucherController::class, 'store'])->name('voucher.them');
+    Route::get('/voucher/sua/{id}', [App\Http\Controllers\admin\VoucherController::class, 'edit'])->name('voucher.sua');
+    Route::post('/voucher/sua/{id}', [App\Http\Controllers\admin\VoucherController::class, 'update'])->name('voucher.sua');
+    Route::get('/voucher/xoa/{id}', [App\Http\Controllers\admin\VoucherController::class, 'destroy'])->name('voucher.xoa');
+    Route::get('/voucher/kichhoat/{id}', [App\Http\Controllers\admin\VoucherController::class, 'kichhoat'])->name('voucher.kichhoat');
 
 });

@@ -56,6 +56,13 @@
                 </a>
             </li>
 
+            <li class="sidebar-item {{ request()->routeIs('admin.voucher*') ? 'active' : '' }}">
+                <a class="sidebar-link" href="{{ route('admin.voucher') }}">
+                    <i class="align-middle" data-feather="tag"></i> 
+                    <span class="align-middle">Mã giảm giá</span>
+                </a>
+            </li>
+
             <li class="sidebar-item {{ request()->routeIs('admin.nguoidung*') ? 'active' : '' }}">
                 <a class="sidebar-link" href="{{ route('admin.nguoidung') }}">
                     <i class="align-middle" data-feather="users"></i> 

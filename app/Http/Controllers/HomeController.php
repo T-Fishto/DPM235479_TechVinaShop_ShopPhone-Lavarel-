@@ -17,6 +17,7 @@ use Laravel\Socialite\Facades\Socialite;
 use Illuminate\Support\Str;
 use Illuminate\Support\Facades\Hash;
 use App\Models\User;
+use App\Mail\LienHeEmail;
 
 class HomeController extends Controller
 {
@@ -167,6 +168,35 @@ class HomeController extends Controller
     { 
         return view('frontend.lienhe');
     }
+
+    public function postLienHe(Request $request)
+    {
+        $request->validate([
+            'ho_ten' => 'required|string|max:255',
+            'dien_thoai' => 'required|string|max:20',
+            'email' => 'required|email|max:255',
+            'noi_dung' => 'required|string',
+        ], [
+            'ho_ten.required' => 'Vui lòng nhập họ tên.',
+            'dien_thoai.required' => 'Vui lòng nhập số điện thoại.',
+            'email.required' => 'Vui lòng nhập email.',
+            'email.email' => 'Email không đúng định dạng.',
+            'noi_dung.required' => 'Vui lòng nhập nội dung lời nhắn.',
+        ]);
+
+        $data = [
+            'ho_ten' => $request->ho_ten,
+            'dien_thoai' => $request->dien_thoai,
+            'email' => $request->email,
+            'noi_dung' => $request->noi_dung,
+        ];
+
+        // Gửi mail tới admin (Bạn có thể đổi sang email thật của bạn)
+        Mail::to(['techvinashop@gmail.com'])->send(new LienHeEmail($data));
+
+        return redirect()->back()->with('status', 'Cảm ơn bạn! Lời nhắn của bạn đã được gửi tới hệ thống. Chúng tôi sẽ sớm phản hồi.');
+    }
+
     // Hàm 1: Đưa khách qua trang chọn tài khoản Google
     public function getGoogleLogin()
     {

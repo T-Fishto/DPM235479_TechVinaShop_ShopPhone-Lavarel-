@@ -26,17 +26,28 @@
 @push('scripts')
 <script>
     document.addEventListener('DOMContentLoaded', function() {
-        // Xóa giỏ hàng trong localStorage sau khi đặt hàng thành công
-        localStorage.removeItem('cart');
-        
-        // Gọi hàm clearCart() từ cart.js (nếu có) để cập nhật giao diện
-        if(typeof window.clearCart === 'function') {
-            window.clearCart();
-        } else {
-            // Thủ công reset số trên icon nếu không dùng cart.js chung
-            let badge = document.querySelector('.badge.bg-gold');
-            if(badge) badge.textContent = '0';
+        // Chỉ xóa các sản phẩm đã mua (selected = true)
+        // Giữ lại các sản phẩm chưa được chọn (selected = false)
+        let remainingCart = [];
+        try {
+            const cart = JSON.parse(localStorage.getItem('cart') || '[]');
+            remainingCart = cart.filter(item => item.selected === false);
+
+            if (remainingCart.length > 0) {
+                localStorage.setItem('cart', JSON.stringify(remainingCart));
+            } else {
+                localStorage.removeItem('cart');
+            }
+        } catch(e) {
+            localStorage.removeItem('cart');
         }
+
+        // Cập nhật số lượng trên badge giỏ hàng
+        // KHÔNG gọi clearCart() vì nó sẽ ghi đè localStorage về rỗng!
+        const totalRemaining = remainingCart.reduce((sum, item) => sum + item.quantity, 0);
+        const badge = document.getElementById('cartCountBadge');
+        if (badge) badge.textContent = totalRemaining;
     });
 </script>
 @endpush
+
